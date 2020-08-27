@@ -1,8 +1,9 @@
 *.pyc
-build/*
-dist/*
-binance_futures.egg-info/*
-
+.idea
+Binance_Futures_python/build/*
+Binance_Futures_python/dist/*
+Binance_Futures_python/binance_futures.egg-info/*
+CoinAnalyze/config.ini
 # jupyter
 *.ipynb_checkpoints
 *.ipynb
