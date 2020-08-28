@@ -19,19 +19,27 @@ f_api = RequestClient(url='https://fapi.binance.com',
                       secret_key=config['binance']['secret_key'])
 
 
+def get_symbol_price(symbol):
+    """
+    获取货币当前价格
+    :param symbol:
+    """
+    recent_trade = f_api.get_symbol_price_ticker(symbol=symbol)
+    return Decimal(recent_trade[0].price)
+
+
 def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
     """
 
     :param symbol:
     :param wait: 是否计算预计价格
+    :param wait_price: 手动传入价格 不传或者为0，自动按照当前价格计算
     :return:
     """
     result = base_api.get_myTrades(symbol=symbol)
     current_price = wait_price
-    if wait:
-        if wait_price == 0:
-            recentTrade = f_api.get_symbol_price_ticker(symbol=symbol)
-            current_price = Decimal(recentTrade[0].price)
+    if wait and wait_price == 0:
+        current_price = get_symbol_price(symbol=symbol)
 
     profit = Decimal(0)
     commission_all = Decimal(0)
@@ -55,7 +63,7 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
             qty_count_all -= qty
             current = quoteQty - commission
         profit = profit + current
-
+    # print(current_price)
     wait_ = qty_count_all * current_price + profit
     print('币种', symbol,
           '总盈利', profit,
