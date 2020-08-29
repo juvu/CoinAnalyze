@@ -4,19 +4,7 @@
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 from decimal import Decimal
 
-from binance_f import RequestClient
-from configparser import ConfigParser
-
-config = ConfigParser()
-# 传入读取文件的地址，encoding文件编码格式，中文必须
-config.read('config.ini', encoding='UTF-8')
-
-base_api = RequestClient(url='https://api.binance.com',
-                         api_key=config['binance']['api_key'],
-                         secret_key=config['binance']['secret_key'])
-f_api = RequestClient(url='https://fapi.binance.com',
-                      api_key=config['binance']['api_key'],
-                      secret_key=config['binance']['secret_key'])
+from CoinAnalyze import f_api, base_api
 
 
 def get_symbol_price(symbol):
@@ -69,6 +57,7 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
           '总盈利', profit,
           '总手续费', commission_all,
           '卖出预计盈利', wait_,
+          '估值', wait_ * 7,
           '入手均价', profit / qty_count_all * -1,
           '现在价格', current_price,
           )
@@ -79,5 +68,8 @@ if __name__ == '__main__':
     # print_hi('SOLUSDT')
     # print_hi('BANDUSDT')
     print_hi('KAVAUSDT', wait=True, wait_price=Decimal(0))
+    # print_hi('QTUMUSDT', wait=True, wait_price=Decimal(0))
+    # print_hi('SANDUSDT', wait=True, wait_price=Decimal(0))
+
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
