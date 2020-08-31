@@ -47,9 +47,11 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
         if buyer:
             qty_count_all += qty
             current = -quoteQty - commission
+            print('买', symbol, '价格', price, '数量', qty, '成交金额', current)
         else:
             qty_count_all -= qty
             current = quoteQty - commission
+            print('卖', symbol, '价格', price, '数量', qty, '成交金额', current)
         profit = profit + current
     # print(current_price)
     wait_ = qty_count_all * current_price + profit
@@ -57,7 +59,7 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
           '总盈利', profit,
           '总手续费', commission_all,
           '卖出预计盈利', wait_,
-          '估值', wait_ * 7,
+          '估值', wait_ * Decimal(6.9),
           '入手均价', profit / qty_count_all * -1,
           '现在价格', current_price,
           )
@@ -65,11 +67,10 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    # print_hi('SOLUSDT')
+    # print_hi('SOLUSDT', wait=True, wait_price=Decimal(5))
     # print_hi('BANDUSDT')
-    print_hi('KAVAUSDT', wait=True, wait_price=Decimal(0))
+    print_hi('BANDUSDT', wait=False, wait_price=Decimal(0))
     # print_hi('QTUMUSDT', wait=True, wait_price=Decimal(0))
     # print_hi('SANDUSDT', wait=True, wait_price=Decimal(0))
-
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
