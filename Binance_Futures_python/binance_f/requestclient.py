@@ -45,7 +45,7 @@ class RequestClient(object):
         self.refresh_limits(response[1])
         return response[0]
 
-    def get_myTrades(self, symbol) -> any:
+    def get_myTrades(self, symbol, start=None, end=None) -> any:
         """
         Check Server Time
 
@@ -53,7 +53,7 @@ class RequestClient(object):
 
         Test connectivity to the Rest API and get the current server time.
         """
-        response = call_sync(self.request_impl.get_myTrades(symbol))
+        response = call_sync(self.request_impl.get_myTrades(symbol, start, end))
         self.refresh_limits(response[1])
         return response[0]
 

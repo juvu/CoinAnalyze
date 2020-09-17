@@ -2,9 +2,15 @@
 
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import time
 from decimal import Decimal
 
 from CoinAnalyze import f_api, base_api
+
+
+def get_time_stamp(t):
+    datetime_obj = time.mktime(time.strptime(t, "%Y-%m-%d %H:%M"))
+    return int(round(datetime_obj * 1000))
 
 
 def get_symbol_price(symbol):
@@ -16,7 +22,7 @@ def get_symbol_price(symbol):
     return Decimal(recent_trade[0].price)
 
 
-def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
+def print_hi(symbol,  wait: 'bool' = False, wait_price: 'Decimal' = 0):
     """
 
     :param symbol:
@@ -24,6 +30,7 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
     :param wait_price: 手动传入价格 不传或者为0，自动按照当前价格计算
     :return:
     """
+
     result = base_api.get_myTrades(symbol=symbol)
     current_price = wait_price
     if wait and wait_price == 0:
@@ -33,6 +40,9 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
     commission_all = Decimal(0)
     qty_count_all = Decimal(0)
     avg_price = Decimal(0)
+    if len(result) == 0:
+        print('没数据')
+        return
     for data in result:
         price = data['price']
         buyer = data['isBuyer']
@@ -59,7 +69,7 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
           '总盈利', profit,
           '总手续费', commission_all,
           '卖出预计盈利', wait_,
-          '估值', wait_ * Decimal(6.9),
+          '估值', wait_ * Decimal(6.8),
           '入手均价', profit / qty_count_all * -1,
           '现在价格', current_price,
           )
@@ -69,7 +79,7 @@ def print_hi(symbol, wait: 'bool' = False, wait_price: 'Decimal' = 0):
 if __name__ == '__main__':
     # print_hi('SOLUSDT', wait=True, wait_price=Decimal(5))
     # print_hi('BANDUSDT')
-    print_hi('BANDUSDT', wait=False, wait_price=Decimal(0))
+    print_hi('KAVAUSDT', wait=True, wait_price=Decimal(5))
     # print_hi('QTUMUSDT', wait=True, wait_price=Decimal(0))
     # print_hi('SANDUSDT', wait=True, wait_price=Decimal(0))
 

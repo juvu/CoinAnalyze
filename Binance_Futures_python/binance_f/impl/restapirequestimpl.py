@@ -118,9 +118,11 @@ class RestApiRequestImpl(object):
         request.json_parser = parse
         return request
 
-    def get_myTrades(self, symbol):
+    def get_myTrades(self, symbol, start, end):
         builder = UrlParamsBuilder()
         builder.put_url("symbol", symbol)
+        builder.put_url("startTime", start)
+        builder.put_url("endTime", end)
         request = self.__create_request_by_get_with_signature("/api/v3/myTrades", builder)
 
         def parse(json_wrapper):
