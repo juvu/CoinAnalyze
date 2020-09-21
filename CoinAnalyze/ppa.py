@@ -14,7 +14,7 @@ data = {'Date': [], 'Open': [], 'High': [], 'Low': [], 'Close': [], 'Volume': []
         '收盘时间': [], '成交额': [], '成交笔数': [], '主动买入成交量': [], '主动买入成交额': [],
         "Support2": [], "Support1": [], "PivotPoint": [], "Resistance1": [], "Resistance2": [],
         }
-klines = base_api.get_klines('BANDUSDT', interval='3m', limit=500)
+klines = base_api.get_klines('UNIUSDT', interval='3m', limit=500)
 
 for k in klines:
     开盘时间, 开盘价, 最高价, 最低价, 收盘价, 成交量, 收盘时间, 成交额, 成交笔数, 主动买入成交量, 主动买入成交额, ignore = k

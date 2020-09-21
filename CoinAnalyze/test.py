@@ -9,7 +9,7 @@ from tqsdk import TqApi, TqBacktest, TargetPosTask, ta, TqSim
 from CoinAnalyze import base_api
 
 
-def get_pv_df(klines: pd.DataFrame, distance=10):
+def get_pv_df(klines: pd.DataFrame, distance=1):
     xxx = np.arange(len(klines))
     yyy = np.array(klines["close"])
 
@@ -24,13 +24,13 @@ def get_pv_df(klines: pd.DataFrame, distance=10):
     p1 = np.poly1d(z1)
     yvals = p1(xxx)
 
-    plt.plot(xxx, yyy, '.', label='original values')
-    plt.plot(xxx, yvals, 'r', label='polyfit values')
-    plt.xlabel('x axis')
-    plt.ylabel('y axis')
-    plt.legend(loc=4)
-    plt.title('polyfitting')
-    plt.show()
+    # plt.plot(xxx, yyy, '.', label='original values')
+    # plt.plot(xxx, yvals, 'r', label='polyfit values')
+    # plt.xlabel('x axis')
+    # plt.ylabel('y axis')
+    # plt.legend(loc=4)
+    # plt.title('polyfitting')
+    # plt.show()
 
     num_peak = signal.find_peaks(yvals, distance=distance)
     num_valley = signal.find_peaks(-yvals, distance=distance)
@@ -40,19 +40,21 @@ def get_pv_df(klines: pd.DataFrame, distance=10):
     num_valley = signal.find_peaks_cwt(yyy, np.arange(1,100), signal.ricker) #小波变换后找峰效果似乎不是很好
     '''
 
-    '''
-    plt.plot(xxx, yyy, '.',label='original values')
-    plt.plot(xxx, yvals, 'r',label='polyfit values')
+    # plt.plot(xxx, yyy, '.', label='original values')
+    plt.plot(xxx, yvals, 'r', label='polyfit values')
     plt.xlabel('x axis')
     plt.ylabel('y axis')
     plt.legend(loc=4)
     plt.title('polyfitting')
     for ii in range(len(num_peak[0])):
-        plt.plot(num_peak[0][ii], yvals[num_peak[0][ii]],'*',markersize=10)
+        plt.text(num_peak[0][ii], yvals[num_peak[0][ii]],
+                 klines.iloc[num_peak[0][ii]]['close'],
+                 color='m')
     for ii in range(len(num_valley[0])):
-        plt.plot(num_valley[0][ii], yvals[num_valley[0][ii]],'*',markersize=10)
+        plt.text(num_valley[0][ii], yvals[num_valley[0][ii]],
+                 klines.iloc[num_valley[0][ii]]['close'],
+                 color='m')
     plt.show()
-    '''
 
     klines_copy = klines.copy()
     # 2为非峰非谷
@@ -76,12 +78,12 @@ data = {'date': [], 'open': [], 'high': [], 'low': [], 'close': [], 'volume': []
         "Support2": [], "Support1": [], "PivotPoint": [], "Resistance1": [], "Resistance2": [],
         }
 # from CoinAnalyze.mock import klines
-klines = base_api.get_klines('BANDUSDT', interval='1m', limit=500)
+klines = base_api.get_klines('KAVAUSDT', interval='6h', limit=500)
 
 for k in klines:
     开盘时间, 开盘价, 最高价, 最低价, 收盘价, 成交量, 收盘时间, 成交额, 成交笔数, 主动买入成交量, 主动买入成交额, ignore = k
 
-    data['date'].append(开盘时间)
+    data['date'].append(收盘时间)
     data['open'].append(float(开盘价))
     data['high'].append(float(最高价))
     data['low'].append(float(最低价))
@@ -107,4 +109,3 @@ price3 = df.iloc[-1]["close"]
 atr = ta.ATR(df, 14).iloc[-1]["atr"]
 
 print(price1, price2, price3)
-
