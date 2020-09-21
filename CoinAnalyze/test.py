@@ -9,12 +9,13 @@ from tqsdk import TqApi, TqBacktest, TargetPosTask, ta, TqSim
 from CoinAnalyze import base_api
 
 
-def get_pv_df(klines: pd.DataFrame, distance=1):
+def get_pv_df(klines: pd.DataFrame, distance=10):
     xxx = np.arange(len(klines))
     yyy = np.array(klines["close"])
 
     warnings.filterwarnings("error")
-    for i in range(1, 100):
+
+    for i in range(1, 500):
         try:
             z1 = np.polyfit(xxx, yyy, i)
         except Warning:
@@ -48,11 +49,11 @@ def get_pv_df(klines: pd.DataFrame, distance=1):
     plt.title('polyfitting')
     for ii in range(len(num_peak[0])):
         plt.text(num_peak[0][ii], yvals[num_peak[0][ii]],
-                 klines.iloc[num_peak[0][ii]]['close'],
+                 round(yvals[num_peak[0][ii]], 2),
                  color='m')
     for ii in range(len(num_valley[0])):
         plt.text(num_valley[0][ii], yvals[num_valley[0][ii]],
-                 klines.iloc[num_valley[0][ii]]['close'],
+                 round(yvals[num_valley[0][ii]], 2),
                  color='m')
     plt.show()
 
@@ -70,6 +71,7 @@ def get_pv_df(klines: pd.DataFrame, distance=1):
     # 峰谷定位
     df = klines_copy[klines_copy["pv"] != 2].copy()
     df["hv"] = df["close"].diff()
+    print(df["hv"])
     return df
 
 
@@ -109,3 +111,4 @@ price3 = df.iloc[-1]["close"]
 atr = ta.ATR(df, 14).iloc[-1]["atr"]
 
 print(price1, price2, price3)
+print(pv)
